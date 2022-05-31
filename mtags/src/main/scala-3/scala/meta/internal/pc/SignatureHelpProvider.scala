@@ -40,29 +40,29 @@ object SignatureHelpProvider:
     val path =
       Interactive.pathTo(trees, pos).dropWhile(t => notCurrentApply(t, pos))
 
-    val (paramN, callableN, alternatives) =
-      Signatures.callInfo(path, pos.span)
+    // val (paramN, callableN, alternatives) =
+    //   Signatures.callInfo(path, pos.span)
+
+    val (paramN, callableN, signatures) = driver.compilationUnits.get(uri) match {
+      case Some(unit) =>
+        val freshCtx = ctx.fresh.setCompilationUnit(unit)
+        Signatures.signatureHelp(pos)(using freshCtx)
+      case None => (0, 0, Nil)
+    }
 
     val signatureInfos =
-      alternatives.flatMap { denot =>
-        val updatedDenot =
-          path.headOption
-            .map { t =>
-              val pre = t.qual
-              denot.asSeenFrom(pre.tpe.widenTermRefExpr)
-            }
-            .getOrElse(denot)
-        val doc = search.symbolDocumentation(denot.symbol)
-        (doc, Signatures.toSignature(updatedDenot)) match
-          case (Some(info), Some(signature)) =>
+      signatures.flatMap { signature =>
+        signature.denot.flatMap(denot => search.symbolDocumentation(denot.symbol)) match
+          case Some(info) =>
             withDocumentation(
               info,
               signature,
-              denot.symbol.is(Flags.JavaDefined)
+              signature.denot.forall(_.symbol.is(Flags.JavaDefined))
             )
-          case (_, sig) => sig
+          case _ => Some(signature)
 
       }
+
     new l.SignatureHelp(
       signatureInfos.map(signatureToSignatureInformation).asJava,
       callableN,

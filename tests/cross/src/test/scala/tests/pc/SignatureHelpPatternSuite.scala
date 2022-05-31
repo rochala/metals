@@ -42,7 +42,7 @@ class SignatureHelpPatternSuite extends BaseSignatureHelpSuite {
 
   check(
     // https://github.com/lampepfl/dotty/issues/15248
-    "generic2".tag(IgnoreScala3),
+    "generic2",
     """
       |case class Two[T](a: T, b: T)
       |object Main {
@@ -53,12 +53,18 @@ class SignatureHelpPatternSuite extends BaseSignatureHelpSuite {
       |""".stripMargin,
     """|(Any, Any)
        | ^^^
-       |""".stripMargin
+       |""".stripMargin,
+     compat = Map(
+       "3" ->
+         """|(a: T, b: T)
+            | ^^^^
+            |""".stripMargin
+       )
   )
 
   check(
     // https://github.com/lampepfl/dotty/issues/15248
-    "generic3".tag(IgnoreScala3),
+    "generic3",
     """
       |case class HKT[C[_], T](a: C[T])
       |object Main {
@@ -67,8 +73,8 @@ class SignatureHelpPatternSuite extends BaseSignatureHelpSuite {
       |  }
       |}
       |""".stripMargin,
-    """|(Any)
-       | ^^^
+    """|(a: C[T])
+       | ^^^^^^^
        |""".stripMargin
   )
 
@@ -106,7 +112,7 @@ class SignatureHelpPatternSuite extends BaseSignatureHelpSuite {
       |}
       |
       |object Main {
-      |  val tp = new Two(1, "") 
+      |  val tp = new Two(1, "")
       |  tp match {
       |    case Two(@@) =>
       |  }
@@ -211,14 +217,9 @@ class SignatureHelpPatternSuite extends BaseSignatureHelpSuite {
       |  }
       |}
     """.stripMargin,
-    """|(List[A])
-       | ^^^^^^^
-       |""".stripMargin,
-    compat = Map(
-      "3" -> """|(String)
-                | ^^^^^^
-                |""".stripMargin
-    )
+    """|(List[String])
+       | ^^^^^^^^^^^^
+       |""".stripMargin
   )
 
   check(
@@ -254,13 +255,16 @@ class SignatureHelpPatternSuite extends BaseSignatureHelpSuite {
       |  }
       |}
     """.stripMargin,
+
     // NOTE(olafur) it's kind of accidental that this doesn't return "unapply[A](..)",
     // the reason is that the qualifier of infix unapplies doesn't have a range position
     // and signature help excludes qualifiers without range positions in order to exclude
     // generated code. Feel free to update this test to have the same expected output as
     // `pat3` without regressing signature help in othere cases like partial functions that
     // generate qualifiers with offset positions.
-    ""
+    """|(String, String)
+       |         ^^^^^^
+       |""".stripMargin
   )
 
   check(
@@ -285,7 +289,7 @@ class SignatureHelpPatternSuite extends BaseSignatureHelpSuite {
 
   check(
     // https://github.com/lampepfl/dotty/issues/15248
-    "pat6".tag(IgnoreScala3),
+    "pat6",
     """
       |object OpenBrowserCommand {
       |  def unapply(command: String): Option[Option[Int]] = {
@@ -297,14 +301,14 @@ class SignatureHelpPatternSuite extends BaseSignatureHelpSuite {
       |  }
       |}
     """.stripMargin,
-    """|(Option[A])
-       | ^^^^^^^^^
+    """|(Option[Int])
+       | ^^^^^^^^^^^
        |""".stripMargin
   )
 
   check(
     // https://github.com/lampepfl/dotty/issues/15248
-    "pat-negative".tag(IgnoreScala3),
+    "pat-negative",
     """
       |object And {
       |  def unapply[A](a: A): Some[(A, A)] = Some((a, a))

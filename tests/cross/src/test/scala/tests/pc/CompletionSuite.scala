@@ -1420,7 +1420,7 @@ class CompletionSuite extends BaseCompletionSuite {
        |  def hello = {
        |    val name = Option("Bob")
        |    name.@@
-       |    println(msg) 
+       |    println(msg)
        |  }
        |}
        |""".stripMargin,

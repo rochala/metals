@@ -5,7 +5,7 @@ object V {
   val scala211 = "2.11.12"
   val scala212 = "2.12.15"
   val scala213 = "2.13.8"
-  val scala3 = "3.1.2"
+  val scala3 = "3.2.0-RC1-bin-SNAPSHOT"
   val nextScala3RC = "3.1.3-RC4"
   val sbtScala = "2.12.14"
   val ammonite212Version = scala212

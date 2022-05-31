@@ -307,13 +307,6 @@ class SignatureHelpDocSuite extends BaseSignatureHelpSuite {
        |         ^^^^
        |  @param x (Int, Int, Int) the value
        |""".stripMargin,
-    compat = Map(
-      // potentially correct, discussed in https://github.com/lampepfl/dotty/issues/15244
-      "3" ->
-        """|apply[T1, T2, T3](_1: T1, _2: T2, _3: T3): (T1, T2, T3)
-           |                                  ^^^^^^
-           |""".stripMargin
-    )
   )
 
   checkDoc(
