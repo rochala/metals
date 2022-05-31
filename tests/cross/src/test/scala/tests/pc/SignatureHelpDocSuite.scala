@@ -306,7 +306,7 @@ class SignatureHelpDocSuite extends BaseSignatureHelpSuite {
        |apply[A](x: A): Option[A]
        |         ^^^^
        |  @param x (Int, Int, Int) the value
-       |""".stripMargin,
+       |""".stripMargin
   )
 
   checkDoc(

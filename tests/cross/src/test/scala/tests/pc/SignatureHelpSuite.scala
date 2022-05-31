@@ -365,10 +365,10 @@ class SignatureHelpSuite extends BaseSignatureHelpSuite {
     "",
     compat = Map(
       "3" ->
-      """|apply[K, V](elems: (K, V)*): Map[K, V]
-         |            ^^^^^^^^^^^^^^
-         |""".stripMargin
-      )
+        """|apply[K, V](elems: (K, V)*): Map[K, V]
+           |            ^^^^^^^^^^^^^^
+           |""".stripMargin
+    )
   )
   check(
     "for",
@@ -473,10 +473,10 @@ class SignatureHelpSuite extends BaseSignatureHelpSuite {
     "",
     compat = Map(
       "3" ->
-      """|apply[K, V](elems: (K, V)*): Map[K, V]
-         |            ^^^^^^^^^^^^^^
-         |""".stripMargin
-      )
+        """|apply[K, V](elems: (K, V)*): Map[K, V]
+           |            ^^^^^^^^^^^^^^
+           |""".stripMargin
+    )
   )
 
   check(

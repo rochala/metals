@@ -54,12 +54,12 @@ class SignatureHelpPatternSuite extends BaseSignatureHelpSuite {
     """|(Any, Any)
        | ^^^
        |""".stripMargin,
-     compat = Map(
-       "3" ->
-         """|(a: T, b: T)
-            | ^^^^
-            |""".stripMargin
-       )
+    compat = Map(
+      "3" ->
+        """|(a: T, b: T)
+           | ^^^^
+           |""".stripMargin
+    )
   )
 
   check(

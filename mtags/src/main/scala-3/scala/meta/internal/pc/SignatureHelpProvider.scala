@@ -43,16 +43,17 @@ object SignatureHelpProvider:
     // val (paramN, callableN, alternatives) =
     //   Signatures.callInfo(path, pos.span)
 
-    val (paramN, callableN, signatures) = driver.compilationUnits.get(uri) match {
+    val (paramN, callableN, signatures) = driver.compilationUnits.get(uri) match
       case Some(unit) =>
         val freshCtx = ctx.fresh.setCompilationUnit(unit)
         Signatures.signatureHelp(pos)(using freshCtx)
       case None => (0, 0, Nil)
-    }
 
     val signatureInfos =
       signatures.flatMap { signature =>
-        signature.denot.flatMap(denot => search.symbolDocumentation(denot.symbol)) match
+        signature.denot.flatMap(denot =>
+          search.symbolDocumentation(denot.symbol)
+        ) match
           case Some(info) =>
             withDocumentation(
               info,
@@ -60,7 +61,6 @@ object SignatureHelpProvider:
               signature.denot.forall(_.symbol.is(Flags.JavaDefined))
             )
           case _ => Some(signature)
-
       }
 
     new l.SignatureHelp(
