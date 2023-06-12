@@ -347,6 +347,11 @@ class WorkspaceLspService(
   ): CompletableFuture[ju.List[DocumentHighlight]] =
     getServiceFor(params.getTextDocument.getUri()).documentHighlights(params)
 
+  override def inlayHints(
+      params: lsp4j.InlayHintParams
+  ): CompletableFuture[java.util.List[lsp4j.InlayHint]] =
+    getServiceFor(params.getTextDocument.getUri()).inlayHints(params)
+
   override def documentSymbol(params: DocumentSymbolParams): CompletableFuture[
     messages.Either[ju.List[DocumentSymbol], ju.List[SymbolInformation]]
   ] =
@@ -1036,6 +1041,8 @@ class WorkspaceLspService(
         } else {
           capabilities.setCodeActionProvider(true)
         }
+
+        capabilities.setInlayHintProvider(true)
 
         val textDocumentSyncOptions = new lsp4j.TextDocumentSyncOptions
         textDocumentSyncOptions.setChange(lsp4j.TextDocumentSyncKind.Full)

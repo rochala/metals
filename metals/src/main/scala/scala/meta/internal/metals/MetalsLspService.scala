@@ -34,6 +34,7 @@ import scala.meta.internal.builds.BuildTools
 import scala.meta.internal.builds.ShellRunner
 import scala.meta.internal.builds.WorkspaceReload
 import scala.meta.internal.decorations.SyntheticsDecorationProvider
+import scala.meta.internal.decorations.InlayHintProvider
 import scala.meta.internal.implementation.ImplementationProvider
 import scala.meta.internal.implementation.Supermethods
 import scala.meta.internal.io.FileIO
@@ -546,11 +547,26 @@ class MetalsLspService(
       trees,
     )
 
+  private val inlayHintsProvider =
+    new InlayHintProvider(
+      folder,
+      semanticdbs,
+      buffers,
+      languageClient,
+      fingerprints,
+      charset,
+      focusedDocument,
+      clientConfig,
+      userConfig,
+      trees,
+    )
+
   private val semanticDBIndexer: SemanticdbIndexer = new SemanticdbIndexer(
     List(
       referencesProvider,
       implementationProvider,
-      syntheticsDecorator,
+//      syntheticsDecorator,
+      inlayHintsProvider,
       testProvider,
     ),
     buildTargets,
@@ -965,6 +981,7 @@ class MetalsLspService(
       ) {
         buildServerPromise.future.flatMap { _ =>
           syntheticsDecorator.refresh()
+          // inlayHintsProvider.refresh()
         }
       } else {
         Future.successful(())
@@ -1352,6 +1369,15 @@ class MetalsLspService(
       CancelTokens.future { token =>
         compilers.documentHighlight(params, token)
       }
+  }
+
+  def inlayHints(
+      params: InlayHintParams
+  ): CompletableFuture[util.List[InlayHint]] = {
+    scribe.info("KTOS WYWOLAL INLAY HINTS")
+    CancelTokens.future { token =>
+      inlayHintsProvider.inlayHints(params).map(_.asJava)
+    }
   }
 
   override def documentSymbol(
