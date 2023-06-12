@@ -61,7 +61,7 @@ final class SyntheticsDecorationProvider(
       focusedDocument,
       clientConfig,
       userConfig,
-      trees
+      trees,
     ) {
 
   override protected def areSyntheticsEnabled: Boolean =
@@ -105,8 +105,6 @@ final class SyntheticsDecorationProvider(
       publish(path, decorations)
     }
   }
-
-
 
   override protected def refreshAction(doc: AbsolutePath): Future[Unit] =
     publishSynthetics(doc, isRefresh = true)

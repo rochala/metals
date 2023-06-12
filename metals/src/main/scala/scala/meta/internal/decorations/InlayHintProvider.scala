@@ -29,7 +29,8 @@ final class InlayHintProvider(
     clientConfig: ClientConfiguration,
     userConfig: () => UserConfiguration,
     trees: Trees,
-)(implicit ec: ExecutionContext) extends Decorations[l.InlayHint](
+)(implicit ec: ExecutionContext)
+    extends Decorations[l.InlayHint](
       workspace,
       semanticdbs,
       buffer,
@@ -39,7 +40,7 @@ final class InlayHintProvider(
       focusedDocument,
       clientConfig,
       userConfig,
-      trees
+      trees,
     ) {
 
   override protected def toDecoration(

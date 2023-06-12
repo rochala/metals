@@ -981,7 +981,7 @@ class MetalsLspService(
       ) {
         buildServerPromise.future.flatMap { _ =>
           syntheticsDecorator.refresh()
-          // inlayHintsProvider.refresh()
+        // inlayHintsProvider.refresh()
         }
       } else {
         Future.successful(())
