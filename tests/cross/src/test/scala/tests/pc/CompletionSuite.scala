@@ -1108,7 +1108,7 @@ class CompletionSuite extends BaseCompletionSuite {
     s"""|object Main {
         |  val Number = "".r
         |  "" match {
-        |    case _: NotImpl@@
+        |    case _: NotImplementedErr@@
         |}
         |""".stripMargin,
     """|NotImplementedError scala
