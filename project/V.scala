@@ -38,6 +38,7 @@ object V {
   val mdoc = "2.5.2"
   val munit = "1.0.0-M10"
   val pprint = "0.7.3"
+  val requests = "0.8.0"
   val sbtBloop = bloop
   val sbtJdiTools = "1.1.1"
   val scalaCli = "1.1.1"

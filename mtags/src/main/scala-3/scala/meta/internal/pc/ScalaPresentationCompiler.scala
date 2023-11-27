@@ -24,6 +24,10 @@ import scala.meta.internal.mtags.MtagsEnrichments.given
 import scala.meta.internal.pc.completions.CompletionProvider
 import scala.meta.internal.pc.completions.OverrideCompletions
 import scala.meta.pc.*
+import scala.meta.internal.telemetry as telemetryApi
+import scala.meta.internal.pc.{telemetry as pcTelemetryApi}
+import scala.meta.internal.metals.RemoteTelemetryReportContext
+import scala.meta.internal.metals.MirroredReportContext
 
 import dotty.tools.dotc.reporting.StoreReporter
 import org.eclipse.lsp4j.DocumentHighlight
@@ -50,9 +54,17 @@ case class ScalaPresentationCompiler(
   private val forbiddenOptions = Set("-print-lines", "-print-tasty")
   private val forbiddenDoubleOptions = Set("-release")
   given ReportContext =
-    folderPath
-      .map(StdReportContext(_, _ => buildTargetName, reportsLevel))
+    val remoteReporters = new RemoteTelemetryReportContext(
+      serverEndpoint = RemoteTelemetryReportContext.discoverTelemetryServer,
+      workspace = folderPath,
+      getReporterContext = makeTelemetryContext,
+    )(using ec = ec)
+    val localReporters = folderPath
+      .map(new StdReportContext(_, _ => buildTargetName, reportsLevel))
       .getOrElse(EmptyReportContext)
+
+    new MirroredReportContext(remoteReporters, localReporters)
+  end given
 
   override def withBuildTargetName(buildTargetName: String) =
     copy(buildTargetName = Some(buildTargetName))
@@ -431,5 +443,14 @@ case class ScalaPresentationCompiler(
     copy(folderPath = Some(workspace))
 
   override def isLoaded() = compilerAccess.isLoaded()
+
+  private def makeTelemetryContext(): telemetryApi.ReporterContext =
+    telemetryApi.ReporterContext.scalaPresentationCompiler(
+      telemetryApi.ScalaPresentationCompilerContext(
+        scalaVersion = scalaVersion,
+        options = options,
+        config = pcTelemetryApi.conversion.PresentationCompilerConfig(config),
+      )
+    )
 
 end ScalaPresentationCompiler
