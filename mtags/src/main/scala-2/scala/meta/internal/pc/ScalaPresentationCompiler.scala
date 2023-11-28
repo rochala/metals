@@ -78,7 +78,12 @@ case class ScalaPresentationCompiler(
     val remoteReporters = new RemoteTelemetryReportContext(
       serverEndpoint = RemoteTelemetryReportContext.discoverTelemetryServer,
       workspace = folderPath,
-      getReporterContext = makeTelemetryContext
+      getReporterContext = makeTelemetryContext,
+      logger = RemoteTelemetryReportContext.LoggerAccess(
+        info = logger.info(_),
+        warning = logger.warning(_),
+        error = logger.severe(_)
+      )
     )
     val localReporters = folderPath
       .map(new StdReportContext(_, _ => buildTargetName, reportsLevel))
@@ -448,11 +453,11 @@ case class ScalaPresentationCompiler(
   }
 
   def makeTelemetryContext(): telemetryApi.ReporterContext =
-    telemetryApi.ReporterContext.scalaPresentationCompiler(
-      telemetryApi.ScalaPresentationCompilerContext(
-        scalaVersion = scalaVersion,
-        options = options,
-        config = pcTelemetryApi.conversion.PresentationCompilerConfig(config)
+    new telemetryApi.ScalaPresentationCompilerContext(
+      /* scalaVersion = */ scalaVersion,
+      /* options = */ options.asJava,
+      /* config = */ pcTelemetryApi.conversion.PresentationCompilerConfig(
+        config
       )
     )
 

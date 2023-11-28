@@ -28,6 +28,7 @@ object V {
   val debugAdapter = "3.1.5"
   val genyVersion = "1.0.0"
   val gradleBloop = "1.6.2"
+  val gson = "2.10.1"
   val java8Compat = "1.0.2"
   val javaSemanticdb = "0.9.8"
   val jsoup = "1.17.2"
