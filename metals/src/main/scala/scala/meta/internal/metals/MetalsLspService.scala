@@ -51,7 +51,7 @@ import scala.meta.internal.metals.Messages.IncompatibleBloopVersion
 import scala.meta.internal.metals.MetalsEnrichments._
 import scala.meta.internal.metals.StdReportContext
 import scala.meta.internal.metals.MirroredReportContext
-import scala.meta.internal.metals.RemoteTelemetryReportContext
+import scala.meta.internal.metals.RemoteReportContext
 import scala.meta.internal.metals.ammonite.Ammonite
 import scala.meta.internal.metals.callHierarchy.CallHierarchyProvider
 import scala.meta.internal.metals.clients.language.ConfiguredLanguageClient
@@ -193,13 +193,16 @@ class MetalsLspService(
     },
     ReportLevel.fromString(MetalsServerConfig.default.loglevel),
   )
-  private val remoteTelemetryReports = new RemoteTelemetryReportContext(
-    serverEndpoint = serverInputs.initialServerConfig.telemetryServer,
-    workspace = Some(folder.toNIO),
+  private val remoteTelemetryReports = new RemoteReportContext(
+    serverEndpoint = RemoteReportContext.DefaultEndpoint,
     getReporterContext = makeTelemetryContext,
+    sanitizers = new RemoteReportContext.Sanitizers(
+      workspace = Some(folder.toNIO),
+      sourceCodeTransformer = Some(ScalametaSourceCodeTransformer),
+    ),
     logger = {
       val logger = logging.MetalsLogger.default
-      RemoteTelemetryReportContext.LoggerAccess(
+      RemoteReportContext.LoggerAccess(
         info = logger.info(_),
         warning = logger.warn(_),
         error = logger.error(_),
