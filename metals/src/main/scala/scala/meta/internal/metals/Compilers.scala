@@ -1142,6 +1142,7 @@ class Compilers(
       .withWorkspace(workspace.toNIO)
       .withScheduledExecutorService(sh)
       .withReportsLoggerLevel(MetalsServerConfig.default.loglevel)
+      .withTelemetryLevel(userConfig().telemetryLevel.stringValue)
       .withConfiguration {
         val options =
           InitializationOptions.from(initializeParams).compilerOptions
