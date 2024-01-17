@@ -591,7 +591,6 @@ object UserConfiguration {
           showInferredType = showInferredType,
           showImplicitArguments = showImplicitArguments,
           showImplicitConversionsAndClasses = showImplicitConversionsAndClasses,
-          remoteLanguageServer = remoteLanguageServer,
           enableStripMarginOnTypeFormatting = enableStripMarginOnTypeFormatting,
           enableIndentOnPaste = enableIndentOnPaste,
           enableSemanticHighlighting = enableSemanticHighlighting,
