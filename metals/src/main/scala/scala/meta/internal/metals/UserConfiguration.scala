@@ -339,17 +339,18 @@ object UserConfiguration {
         "Show all compilation debugging information",
         """|If a build server supports it (for example Bloop or Scala CLI), setting it to true
            |will make the logs contain all the possible debugging information including
-           |about incremental compilation in Zinc.""".stripMargin
+           |about incremental compilation in Zinc.""".stripMargin,
       ),
       UserConfigurationOption(
         "telemetry-level",
         TelemetryLevel.default.stringValue,
-        TelemetryLevel.default.stringValue,
+        TelemetryLevel.All.stringValue,
         "Scope of reported telemetry data",
         s"""Control what kind of telemetry events can be send to maintainers of Metals.
            |With `${TelemetryLevel.Off.stringValue}` no telemetry data would be send.
            |Minimal recommended level is `${TelemetryLevel.Error.stringValue}` which would collect diagnostic information when Metals components would crash or fail unexpectedly, allowing to understand why the problem occoured.
-           |Defaults to `${TelemetryLevel.All.stringValue}` allowing to collect all information including how features are used to help us priortize future improvements."
+           |The highest telemtetry level `${TelemetryLevel.All.stringValue}` allows to collect all information including how features are used to help us priortize future improvements."
+           |Defaults to `${TelemetryLevel.default.stringValue}`.
            |""".stripMargin,
       ),
     )
@@ -568,7 +569,7 @@ object UserConfiguration {
 
     val telemetryLevel = getStringKey("telemetry-level")
       .flatMap(TelemetryLevel.fromString)
-      .getOrElse(TelemetryLevel.default)
+      .getOrElse(TelemetryLevel.discover)
 
     if (errors.isEmpty) {
       Right(
