@@ -2855,6 +2855,9 @@ class MetalsLspService(
       /* serverConfig = */ telemetry.conversion.MetalsServerConfig(
         serverInputs.initialServerConfig
       ),
+      /* clientInfo =*/ telemetry.conversion.MetalsClientInfo(
+        initializeParams.getClientInfo()
+      ),
       /* buildServerConnections = */ bspSession.toList
         .flatMap(
           telemetry.conversion.BuildServerConnections(_)
