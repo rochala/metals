@@ -1144,10 +1144,10 @@ class Compilers(
       config: PresentationCompilerConfig,
       options: List[String],
   ): ReporterContext =
-    new ScalaPresentationCompilerContext(
-      scalaVersion,
-      options.asJava,
-      telemetry.conversion.PresentationCompilerConfig(config),
+    ScalaPresentationCompilerContext(
+      scalaVersion = scalaVersion,
+      options = options,
+      config = telemetry.conversion.PresentationCompilerConfig(config),
     )
 
   private def remoteReporting(
