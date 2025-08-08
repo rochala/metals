@@ -98,6 +98,13 @@ public abstract class PresentationCompiler {
 	public abstract CompletableFuture<DefinitionResult> definition(OffsetParams params);
 
 	/**
+	 * Returns the definition of the symbol at the given position.
+	 */
+	public CompletableFuture<TastyInformation> tastyInfo(OffsetParams params) {
+    return null;
+  }
+
+	/**
 	 * Returns location of the expression's type definition at the given position.
 	 */
 	public abstract CompletableFuture<DefinitionResult> typeDefinition(OffsetParams params);
